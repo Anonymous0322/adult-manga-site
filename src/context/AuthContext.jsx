@@ -17,10 +17,9 @@ const parseSafe = (value, fallback) => {
 
 const normalizeUsers = (value) => (Array.isArray(value) ? value : []);
 
-const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL || 'ruhiddinov03@gmail.com';
-const ADMIN_PASSWORD = process.env.REACT_APP_ADMIN_PASSWORD || 'Behruz03';
-const ADMIN_USERNAME = process.env.REACT_APP_ADMIN_USERNAME || 'darlingohioo';
-const FORCE_ADMIN_RESET = process.env.REACT_APP_FORCE_ADMIN === 'true';
+const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
+const ADMIN_PASSWORD = process.env.REACT_APP_ADMIN_PASSWORD;
+const ADMIN_USERNAME = process.env.REACT_APP_ADMIN_USERNAME || 'Admin';
 
 const getUsers = () => {
   const parsed = parseSafe(localStorage.getItem(USERS_KEY), []);
@@ -29,14 +28,9 @@ const getUsers = () => {
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
   }
 
-  if (FORCE_ADMIN_RESET) {
-    users = [];
-    localStorage.setItem(USERS_KEY, JSON.stringify([]));
-    localStorage.removeItem(CURRENT_USER_KEY);
-  }
-
   if (ADMIN_EMAIL && ADMIN_PASSWORD) {
-    const exists = users.some((u) => (u.email || '').toLowerCase() === ADMIN_EMAIL.toLowerCase());
+    const adminEmail = ADMIN_EMAIL.toLowerCase();
+    const exists = users.some((u) => (u.email || '').toLowerCase() === adminEmail);
     if (!exists) {
       const adminUser = {
         id: Date.now(),
@@ -49,6 +43,17 @@ const getUsers = () => {
         role: 'admin'
       };
       users = [...users, adminUser];
+      localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    } else {
+      users = users.map((u) => {
+        if ((u.email || '').toLowerCase() !== adminEmail) return u;
+        return {
+          ...u,
+          username: ADMIN_USERNAME || u.username,
+          password: ADMIN_PASSWORD || u.password,
+          role: 'admin'
+        };
+      });
       localStorage.setItem(USERS_KEY, JSON.stringify(users));
     }
   }
