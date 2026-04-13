@@ -17,15 +17,22 @@ const parseSafe = (value, fallback) => {
 
 const normalizeUsers = (value) => (Array.isArray(value) ? value : []);
 
-const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL || "ruhiddinov03@gmail.com";
+const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL || 'ruhiddinov03@gmail.com';
 const ADMIN_PASSWORD = process.env.REACT_APP_ADMIN_PASSWORD || 'Behruz03';
-const ADMIN_USERNAME = process.env.REACT_APP_ADMIN_USERNAME || 'Admin';
+const ADMIN_USERNAME = process.env.REACT_APP_ADMIN_USERNAME || 'darlingohioo';
+const FORCE_ADMIN_RESET = process.env.REACT_APP_FORCE_ADMIN === 'true';
 
 const getUsers = () => {
   const parsed = parseSafe(localStorage.getItem(USERS_KEY), []);
   let users = normalizeUsers(parsed);
   if (!Array.isArray(parsed)) {
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  }
+
+  if (FORCE_ADMIN_RESET) {
+    users = [];
+    localStorage.setItem(USERS_KEY, JSON.stringify([]));
+    localStorage.removeItem(CURRENT_USER_KEY);
   }
 
   if (ADMIN_EMAIL && ADMIN_PASSWORD) {
