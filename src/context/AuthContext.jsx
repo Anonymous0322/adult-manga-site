@@ -17,8 +17,8 @@ const parseSafe = (value, fallback) => {
 
 const normalizeUsers = (value) => (Array.isArray(value) ? value : []);
 
-const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
-const ADMIN_PASSWORD = process.env.REACT_APP_ADMIN_PASSWORD;
+const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL || "ruhiddinov03@gmail.com";
+const ADMIN_PASSWORD = process.env.REACT_APP_ADMIN_PASSWORD || 'Behruz03';
 const ADMIN_USERNAME = process.env.REACT_APP_ADMIN_USERNAME || 'Admin';
 
 const getUsers = () => {
