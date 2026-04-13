@@ -1,0 +1,310 @@
+/* TopUsers.css - Енги камайтирилган версия */
+.top-users-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  margin-top: 5px; /* Тепарокга кўтариш */
+}
+
+.top-users-card h3 {
+  font-size: 1rem;
+  margin-bottom: 12px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.top-users-card h3 i {
+  color: #ffa726;
+  font-size: 0.8rem;
+}
+
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.user-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  min-height: 70px;
+}
+
+.user-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.user-rank {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #6b6bff;
+  color: #fff;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: bold;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  z-index: 2;
+}
+
+/* 1-ўрин учун - Олтин */
+.user-card[data-rank="1"] .user-rank {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #000;
+  border-color: #FFA500;
+  width: 22px;
+  height: 22px;
+}
+
+/* 2-ўрин учун - Кумуш */
+.user-card[data-rank="2"] .user-rank {
+  background: linear-gradient(135deg, #C0C0C0, #A0A0A0);
+  color: #333;
+  border-color: #A0A0A0;
+}
+
+/* 3-ўрин учун - Бронза */
+.user-card[data-rank="3"] .user-rank {
+  background: linear-gradient(135deg, #CD7F32, #B87333);
+  color: #fff;
+  border-color: #B87333;
+}
+
+.user-avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6b6bff, #8e8eff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: white;
+  font-size: 1.1rem; /* Эмоджи учун кичкинароқ фонт */
+  position: relative;
+  z-index: 1;
+}
+
+/* Аватар ранглари */
+.user-card[data-rank="1"] .user-avatar {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+  width: 38px;
+  height: 38px;
+}
+
+.user-card[data-rank="2"] .user-avatar {
+  background: linear-gradient(135deg, #C0C0C0, #A0A0A0);
+  box-shadow: 0 0 8px rgba(192, 192, 192, 0.5);
+}
+
+.user-card[data-rank="3"] .user-avatar {
+  background: linear-gradient(135deg, #CD7F32, #B87333);
+  box-shadow: 0 0 8px rgba(205, 127, 50, 0.5);
+}
+
+.user-info {
+  width: 100%;
+  min-width: 0;
+}
+
+.username {
+  font-weight: 600;
+  color: #fff;
+  font-size: 0.75rem;
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  padding: 0 2px;
+}
+
+.user-score {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+.user-score i {
+  color: #ffa726;
+  font-size: 0.6rem;
+}
+
+/* Тўж ранглари */
+.rank-emoji {
+  font-size: 1.1rem;
+  line-height: 1;
+  display: block;
+}
+
+.gold-crown {
+  color: #FFD700;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.7),
+               0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+.silver-crown {
+  color: #C0C0C0;
+  text-shadow: 0 0 5px rgba(192, 192, 192, 0.7),
+               0 0 10px rgba(192, 192, 192, 0.4);
+}
+
+.bronze-crown {
+  color: #CD7F32;
+  text-shadow: 0 0 5px rgba(205, 127, 50, 0.7),
+               0 0 10px rgba(205, 127, 50, 0.4);
+}
+
+/* Адаптивлик */
+@media (max-width: 1024px) {
+  .users-grid {
+    gap: 6px;
+  }
+  
+  .user-card {
+    padding: 6px;
+    min-height: 65px;
+  }
+  
+  .user-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+  
+  .user-card[data-rank="1"] .user-avatar {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .username {
+    font-size: 0.7rem;
+  }
+  
+  .rank-emoji {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .top-users-card {
+    padding: 10px;
+  }
+  
+  .top-users-card h3 {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
+  
+  .users-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  
+  .user-card {
+    padding: 8px 6px;
+    min-height: 60px;
+  }
+  
+  .user-avatar {
+    width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+  }
+  
+  .user-card[data-rank="1"] .user-avatar {
+    width: 33px;
+    height: 33px;
+  }
+  
+  .username {
+    font-size: 0.68rem;
+  }
+  
+  .user-score {
+    font-size: 0.65rem;
+  }
+  
+  .user-rank {
+    width: 18px;
+    height: 18px;
+    font-size: 0.65rem;
+    top: -5px;
+    right: -5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .users-grid {
+    grid-template-columns: repeat(1, 1fr);
+    gap: 8px;
+  }
+  
+  .user-card {
+    flex-direction: row;
+    text-align: left;
+    padding: 8px;
+    align-items: center;
+    min-height: auto;
+  }
+  
+  .user-avatar {
+    margin-bottom: 0;
+    margin-right: 10px;
+    width: 32px;
+    height: 32px;
+  }
+  
+  .user-card[data-rank="1"] .user-avatar {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .user-rank {
+    top: -4px;
+    right: -4px;
+    width: 18px;
+    height: 18px;
+    font-size: 0.65rem;
+  }
+  
+  .username {
+    margin-bottom: 2px;
+    font-size: 0.75rem;
+    text-align: left;
+  }
+  
+  .user-score {
+    justify-content: flex-start;
+    font-size: 0.7rem;
+  }
+  
+  .user-info {
+    text-align: left;
+  }
+}

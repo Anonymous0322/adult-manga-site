@@ -1,0 +1,49 @@
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stars-container {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.star {
+    transition: all 0.2s;
+}
+
+.star i {
+    transition: all 0.2s;
+}
+
+.star.empty i {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.star.filled i {
+    color: #ffa726;
+}
+
+.star:hover:not(.empty) {
+    transform: scale(1.2);
+}
+
+/* Star sizes */
+.star.small i {
+    font-size: 1rem;
+}
+
+.star.medium i {
+    font-size: 1.25rem;
+}
+
+.star.large i {
+    font-size: 1.5rem;
+}
+
+.rating-value {
+    font-weight: 600;
+    color: #ffa726;
+    font-size: 0.875rem;
+}

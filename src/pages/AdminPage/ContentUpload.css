@@ -1,0 +1,11 @@
+.admin-content-upload {
+    max-width: 1200px;
+}
+
+.admin-content-upload h1 {
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}

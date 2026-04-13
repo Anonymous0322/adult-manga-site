@@ -1,0 +1,22 @@
+﻿import { ApiError } from '../utils/ApiError.js';
+
+export const notFoundHandler = (req, _res, next) => {
+  next(new ApiError(404, `Route not found: ${req.method} ${req.originalUrl}`));
+};
+
+export const errorHandler = (error, _req, res, _next) => {
+  const status = error.statusCode || 500;
+  const payload = {
+    message: error.message || 'Internal server error'
+  };
+
+  if (error.details) {
+    payload.details = error.details;
+  }
+
+  if (process.env.NODE_ENV !== 'production' && error.stack) {
+    payload.stack = error.stack;
+  }
+
+  res.status(status).json(payload);
+};

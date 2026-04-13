@@ -1,0 +1,182 @@
+/* App.css */
+
+/* Асосий контейнерлар */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-top: 10px; /* Header учун жой қолдирамиз */
+}
+
+/* Контент сигмаётганда скролл қўшиш */
+.content-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+/* Адаптив дизайн учун */
+@media (max-width: 1200px) {
+  .main-content {
+    padding: 15px;
+    padding-top: 70px;
+    max-width: 95%;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 10px;
+    padding-top: 60px;
+    max-width: 100%;
+  }
+}
+
+/* Бош саҳифа ва бошқа саҳифалар учун умуммий стил */
+.page-container {
+  width: 100%;
+  min-height: calc(100vh - 80px);
+  padding: 20px;
+}
+
+/* Админ панели учун алоҳида стил */
+.admin-container {
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 15px;
+  padding: 25px;
+  margin-top: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Форма ва таблицалар учун */
+.admin-table-container {
+  overflow-x: auto;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  margin: 20px 0;
+  padding: 15px;
+}
+
+.admin-table {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 15px 20px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-table th {
+  background: rgba(255, 255, 255, 0.1);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  letter-spacing: 0.5px;
+}
+
+.admin-table tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Мобил версия учун таблица */
+@media (max-width: 768px) {
+  .admin-table-container {
+    padding: 10px;
+  }
+  
+  .admin-table {
+    min-width: 600px;
+  }
+  
+  .admin-table th,
+  .admin-table td {
+    padding: 10px 15px;
+    font-size: 0.9em;
+  }
+}
+
+/* Карточкалар учун грид система */
+.grid-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 20px;
+}
+
+/* Каталог саҳифаси учун */
+
+
+/* Форум учун */
+.forum-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Профил саҳифаси учун */
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Контент саҳифаси учун */
+.content-detail-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Утилита класслари */
+.scrollable {
+  overflow-y: auto;
+  max-height: 70vh;
+}
+
+.no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Loading ва error учун */
+.loading-container,
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.error-container {
+  color: #ff6b6b;
+}
+
+/* Responsive images */
+.responsive-img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+}
