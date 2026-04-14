@@ -52,7 +52,7 @@ const RegisterModal = ({ onClose, onSwitchToLogin }) => {
       if (result.success) {
         onClose();
       } else {
-        setError('Ошибка при регистрации. Попробуйте снова.');
+        setError(result.message || 'Ошибка при регистрации. Попробуйте снова.');
       }
     } catch (error) {
       setError('Ошибка при регистрации. Попробуйте снова.');

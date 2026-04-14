@@ -39,8 +39,16 @@ export const getMangaWithChaptersService = async (mangaId) => {
   return { ...manga, chapters };
 };
 
-export const createMangaService = async ({ title, description, genres, coverImage, createdBy }) => {
-  return Manga.create({ title, description, genres, coverImage, createdBy });
+export const createMangaService = async ({
+  title,
+  description,
+  author,
+  category,
+  genres,
+  coverImage,
+  createdBy
+}) => {
+  return Manga.create({ title, description, author, category, genres, coverImage, createdBy });
 };
 
 export const updateMangaService = async (mangaId, patch) => {

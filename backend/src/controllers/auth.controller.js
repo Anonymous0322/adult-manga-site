@@ -1,6 +1,6 @@
 ﻿import { asyncHandler } from '../utils/asyncHandler.js';
 import { ApiError } from '../utils/ApiError.js';
-import { loginService, registerAdminService } from '../services/auth.service.js';
+import { loginService, registerAdminService, registerUserService } from '../services/auth.service.js';
 
 export const registerAdmin = asyncHandler(async (req, res) => {
   const { username, email, password, setupKey } = req.body;
@@ -31,4 +31,15 @@ export const login = asyncHandler(async (req, res) => {
 
   const result = await loginService({ email, password });
   res.json(result);
+});
+
+export const register = asyncHandler(async (req, res) => {
+  const { username, email, password } = req.body;
+
+  if (!username || !email || !password) {
+    throw new ApiError(400, 'username, email and password are required');
+  }
+
+  const result = await registerUserService({ username, email, password });
+  res.status(201).json(result);
 });

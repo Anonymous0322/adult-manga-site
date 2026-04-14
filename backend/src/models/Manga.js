@@ -10,6 +10,12 @@ const mangaSchema = new mongoose.Schema(
       maxlength: 180,
       index: true
     },
+    author: {
+      type: String,
+      trim: true,
+      maxlength: 120,
+      default: ''
+    },
     slug: {
       type: String,
       unique: true,
@@ -28,6 +34,12 @@ const mangaSchema = new mongoose.Schema(
       type: [String],
       default: [],
       index: true
+    },
+    category: {
+      type: String,
+      trim: true,
+      maxlength: 40,
+      default: 'manga'
     },
     chapterCount: {
       type: Number,

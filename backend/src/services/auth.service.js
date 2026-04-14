@@ -49,3 +49,29 @@ export const loginService = async ({ email, password }) => {
     }
   };
 };
+
+export const registerUserService = async ({ username, email, password }) => {
+  const existing = await User.findOne({ email: email.toLowerCase() });
+  if (existing) {
+    throw new ApiError(409, 'Email already in use');
+  }
+
+  const user = await User.create({
+    username,
+    email,
+    password,
+    role: 'user'
+  });
+
+  const token = signToken({ userId: user._id, role: user.role });
+
+  return {
+    token,
+    user: {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      role: user.role
+    }
+  };
+};

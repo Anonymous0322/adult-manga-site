@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { authApi } from '../utils/api';
 
 export const AuthContext = createContext();
 
 const CURRENT_USER_KEY = 'mangauz_user';
-const USERS_KEY = 'mangauz_registered_users';
+const TOKEN_KEY = 'mangauz_token';
 
 const parseSafe = (value, fallback) => {
   if (value === null || value === undefined || value === 'null') return fallback;
@@ -15,51 +16,8 @@ const parseSafe = (value, fallback) => {
   }
 };
 
-const normalizeUsers = (value) => (Array.isArray(value) ? value : []);
-
-const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL;
-const ADMIN_PASSWORD = process.env.REACT_APP_ADMIN_PASSWORD;
-const ADMIN_USERNAME = process.env.REACT_APP_ADMIN_USERNAME || 'Admin';
-
-const getUsers = () => {
-  const parsed = parseSafe(localStorage.getItem(USERS_KEY), []);
-  let users = normalizeUsers(parsed);
-  if (!Array.isArray(parsed)) {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  }
-
-  if (ADMIN_EMAIL && ADMIN_PASSWORD) {
-    const adminEmail = ADMIN_EMAIL.toLowerCase();
-    const exists = users.some((u) => (u.email || '').toLowerCase() === adminEmail);
-    if (!exists) {
-      const adminUser = {
-        id: Date.now(),
-        email: ADMIN_EMAIL,
-        username: ADMIN_USERNAME,
-        password: ADMIN_PASSWORD,
-        avatar: null,
-        level: 1,
-        points: 0,
-        role: 'admin'
-      };
-      users = [...users, adminUser];
-      localStorage.setItem(USERS_KEY, JSON.stringify(users));
-    } else {
-      users = users.map((u) => {
-        if ((u.email || '').toLowerCase() !== adminEmail) return u;
-        return {
-          ...u,
-          username: ADMIN_USERNAME || u.username,
-          password: ADMIN_PASSWORD || u.password,
-          role: 'admin'
-        };
-      });
-      localStorage.setItem(USERS_KEY, JSON.stringify(users));
-    }
-  }
-
-  return users;
-};
+const extractErrorMessage = (error, fallback) =>
+  error?.response?.data?.message || error?.message || fallback;
 
 export const useAuth = () => useContext(AuthContext);
 
@@ -68,64 +26,56 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem(CURRENT_USER_KEY);
+    const storedUser = parseSafe(localStorage.getItem(CURRENT_USER_KEY), null);
     if (storedUser) {
-      const parsed = parseSafe(storedUser, null);
-      const isDemoAdmin = parsed?.email === 'ruhiddinov03@gmail.com' && parsed?.username === 'Admin';
-      if (isDemoAdmin) {
-        localStorage.removeItem(CURRENT_USER_KEY);
-      } else {
-        setUser(parsed);
-      }
+      setUser(storedUser);
     }
-    getUsers();
     setLoading(false);
   }, []);
 
-  const login = async (email, password) => {
-    const users = getUsers();
-    const existing = users.find((u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
-    if (!existing) {
-      return { success: false, message: 'Invalid email or password' };
+  const persistSession = (payload) => {
+    const userData = payload?.user || null;
+    const token = payload?.token || '';
+
+    if (!userData || !token) {
+      throw new Error('Invalid auth response from server');
     }
 
-    const signedUser = { ...existing };
-    delete signedUser.password;
-    setUser(signedUser);
-    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(signedUser));
-    return { success: true, user: signedUser };
+    setUser(userData);
+    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(userData));
+    localStorage.setItem(TOKEN_KEY, token);
+
+    return { success: true, user: userData };
+  };
+
+  const login = async (email, password) => {
+    try {
+      const response = await authApi.login(email, password);
+      return persistSession(response.data);
+    } catch (error) {
+      return {
+        success: false,
+        message: extractErrorMessage(error, 'Invalid email or password')
+      };
+    }
   };
 
   const register = async (email, password, username) => {
-    const users = getUsers();
-    const exists = users.some((u) => u.email.toLowerCase() === email.toLowerCase());
-    if (exists) {
-      return { success: false, message: 'Email already exists' };
+    try {
+      const response = await authApi.register(email, password, username);
+      return persistSession(response.data);
+    } catch (error) {
+      return {
+        success: false,
+        message: extractErrorMessage(error, 'Registration failed')
+      };
     }
-
-    const hasAdmin = users.some((u) => u.role === 'admin');
-    const newUser = {
-      id: Date.now(),
-      email,
-      username,
-      password,
-      avatar: null,
-      level: 1,
-      points: 0,
-      role: hasAdmin ? 'user' : 'admin'
-    };
-    localStorage.setItem(USERS_KEY, JSON.stringify([...users, newUser]));
-
-    const signedUser = { ...newUser };
-    delete signedUser.password;
-    setUser(signedUser);
-    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(signedUser));
-    return { success: true, user: signedUser };
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem(CURRENT_USER_KEY);
+    localStorage.removeItem(TOKEN_KEY);
   };
 
   const updateProfile = (patch) => {
@@ -133,11 +83,6 @@ export const AuthProvider = ({ children }) => {
       if (!prev) return prev;
       const next = { ...prev, ...patch };
       localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(next));
-
-      const users = getUsers();
-      const updatedUsers = normalizeUsers(users).map((u) => (u.id === prev.id ? { ...u, ...patch } : u));
-      localStorage.setItem(USERS_KEY, JSON.stringify(updatedUsers));
-
       return next;
     });
   };

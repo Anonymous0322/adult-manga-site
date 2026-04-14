@@ -24,7 +24,7 @@ const LoginModal = ({ onClose, onSwitchToRegister }) => {
       if (result.success) {
         onClose();
       } else {
-        setError('Неверный email или пароль');
+        setError(result.message || 'Неверный email или пароль');
       }
     } catch (error) {
       setError('Ошибка при входе. Попробуйте снова.');

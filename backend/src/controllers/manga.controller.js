@@ -23,7 +23,7 @@ export const getMangaById = asyncHandler(async (req, res) => {
 });
 
 export const createManga = asyncHandler(async (req, res) => {
-  const { title, description, genres } = req.body;
+  const { title, description, genres, author, category } = req.body;
 
   if (!title || !description) {
     throw new ApiError(400, 'title and description are required');
@@ -38,6 +38,8 @@ export const createManga = asyncHandler(async (req, res) => {
   const manga = await createMangaService({
     title,
     description,
+    author: String(author || '').trim(),
+    category: String(category || 'manga').trim(),
     genres: Array.isArray(genres) ? genres : String(genres || '').split(',').map((g) => g.trim()).filter(Boolean),
     coverImage: {
       url: cover.url,
@@ -52,10 +54,12 @@ export const createManga = asyncHandler(async (req, res) => {
 
 export const updateManga = asyncHandler(async (req, res) => {
   const patch = {};
-  const { title, description, genres } = req.body;
+  const { title, description, genres, author, category } = req.body;
 
   if (title) patch.title = title;
   if (description) patch.description = description;
+  if (author !== undefined) patch.author = String(author).trim();
+  if (category !== undefined) patch.category = String(category).trim();
   if (genres !== undefined) {
     patch.genres = Array.isArray(genres)
       ? genres
